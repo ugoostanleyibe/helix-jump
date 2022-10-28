@@ -1,19 +1,22 @@
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+	public GameObject levelCompletedPanel, gameProgressPanel, startMenuPanel, gameOverPanel;
 	public TextMeshProUGUI currentLevelText, nextLevelText;
-	public GameObject levelCompletedPanel, gameOverPanel;
 	public Slider gameProgressSlider;
 
 	public static int numberOfPassedRings;
 	public static int currentLevelIndex;
 
 	public static bool isLevelCompleted;
+	public static bool isGameRunning;
 	public static bool isGameOver;
+	public static bool isOnMute;
 
 	private void Awake()
 	{
@@ -23,7 +26,7 @@ public class GameManager : MonoBehaviour
 	// Start is called before the first frame update
 	private void Start()
 	{
-		isLevelCompleted = isGameOver = false;
+		isLevelCompleted = isGameRunning = isGameOver = false;
 		numberOfPassedRings = 0;
 		Time.timeScale = 1;
 	}
@@ -38,15 +41,11 @@ public class GameManager : MonoBehaviour
 
 		gameProgressSlider.value = progress;
 
-		if (isGameOver)
+		if (!isGameRunning && Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
 		{
-			Time.timeScale = 0;
-			gameOverPanel.SetActive(true);
-
-			if (Input.GetButtonDown("Fire1"))
-			{
-				SceneManager.LoadScene("Level");
-			}
+			gameProgressPanel.SetActive(true);
+			startMenuPanel.SetActive(false);
+			isGameRunning = true;
 		}
 
 		if (isLevelCompleted)
@@ -56,6 +55,17 @@ public class GameManager : MonoBehaviour
 			if (Input.GetButtonDown("Fire1"))
 			{
 				PlayerPrefs.SetInt("CurrentLevelIndex", currentLevelIndex + 1);
+				SceneManager.LoadScene("Level");
+			}
+		}
+
+		if (isGameOver)
+		{
+			Time.timeScale = 0;
+			gameOverPanel.SetActive(true);
+
+			if (Input.GetButtonDown("Fire1"))
+			{
 				SceneManager.LoadScene("Level");
 			}
 		}

@@ -31,6 +31,9 @@ public class AudioManager : MonoBehaviour
 
 	public void Play(string soundName)
 	{
-		Array.Find(sounds, item => item.name == soundName).source.Play();
+		if (!GameManager.isOnMute)
+		{
+			Array.Find(sounds, item => item.name == soundName).source.Play(); 
+		}
 	}
 }
