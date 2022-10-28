@@ -5,15 +5,13 @@ public class HelixManager : MonoBehaviour
 	public GameObject[] helixRings;
 	public GameObject baseRing;
 
-	public float ringsDistance, spawnY = 0.0f;
-	public int numberOfRings;
+	public float distanceBetweenRings, spawnY;
+	public int startingNumberOfRings;
 
 	// Start is called before the first frame update
 	private void Start()
 	{
-		numberOfRings = GameManager.currentLevelIndex + 5;
-
-		for (int i = 0; i < numberOfRings; i++)
+		for (int i = 0; i < GameManager.currentLevel + startingNumberOfRings - 1; i++)
 		{
 			if (i > 0)
 			{
@@ -28,16 +26,10 @@ public class HelixManager : MonoBehaviour
 		SpawnRing(helixRings.Length - 1);
 	}
 
-	// Update is called once per frame
-	private void Update()
-	{
-
-	}
-
 	public void SpawnRing(int ringIndex)
 	{
 		var obj = Instantiate(helixRings[ringIndex], transform.up * spawnY, Quaternion.identity);
 		obj.transform.parent = transform;
-		spawnY -= ringsDistance;
+		spawnY -= distanceBetweenRings;
 	}
 }
