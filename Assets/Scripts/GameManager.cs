@@ -37,7 +37,9 @@ public class GameManager : MonoBehaviour
 		currentLevelText.text = $"{currentLevelIndex}";
 		scoreText.text = $"{score}";
 
-		if (!isGameRunning && Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+		if (!isGameRunning && Input.touchCount > 0
+			&& Input.GetTouch(0).phase == TouchPhase.Began
+			&& !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
 		{
 			gameProgressPanel.SetActive(true);
 			startMenuPanel.SetActive(false);
