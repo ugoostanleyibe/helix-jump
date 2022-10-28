@@ -22,6 +22,7 @@ public class CharacterSelector : MonoBehaviour
 	public void ChangeCharacter(int characterIndex)
 	{
 		characters[selectedCharacterIndex].SetActive(false);
-		characters[selectedCharacterIndex = characterIndex].SetActive(true);
+		characters[characterIndex].SetActive(true);
+		selectedCharacterIndex = characterIndex;
 	}
 }

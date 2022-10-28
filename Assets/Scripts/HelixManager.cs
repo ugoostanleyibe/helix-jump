@@ -5,9 +5,7 @@ public class HelixManager : MonoBehaviour
 	public GameObject[] helixRings;
 	public GameObject baseRing;
 
-	public float ringsDistance = 5.0f;
-	public float spawnY = 0.0f;
-
+	public float ringsDistance, spawnY = 0.0f;
 	public int numberOfRings;
 
 	// Start is called before the first frame update

@@ -7,16 +7,11 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
 	public GameObject levelCompletedPanel, gameProgressPanel, startMenuPanel, gameOverPanel;
-	public TextMeshProUGUI currentLevelText, nextLevelText;
+	public TextMeshProUGUI currentLevelText, nextLevelText, highScoreText, scoreText;
 	public Slider gameProgressSlider;
 
-	public static int numberOfPassedRings;
-	public static int currentLevelIndex;
-
-	public static bool isLevelCompleted;
-	public static bool isGameRunning;
-	public static bool isGameOver;
-	public static bool isOnMute;
+	public static bool isLevelCompleted, isGameRunning, isGameOver, isOnMute;
+	public static int numberOfPassedRings, currentLevelIndex, score;
 
 	private void Awake()
 	{
@@ -26,6 +21,7 @@ public class GameManager : MonoBehaviour
 	// Start is called before the first frame update
 	private void Start()
 	{
+		highScoreText.text = $"Best Score\n{PlayerPrefs.GetInt("HighScore", 0)}";
 		isLevelCompleted = isGameRunning = isGameOver = false;
 		numberOfPassedRings = 0;
 		Time.timeScale = 1;
@@ -35,11 +31,11 @@ public class GameManager : MonoBehaviour
 	private void Update()
 	{
 		int progress = numberOfPassedRings * 100 / FindObjectOfType<HelixManager>().numberOfRings;
+		gameProgressSlider.value = progress;
 
 		nextLevelText.text = $"{currentLevelIndex + 1}";
 		currentLevelText.text = $"{currentLevelIndex}";
-
-		gameProgressSlider.value = progress;
+		scoreText.text = $"{score}";
 
 		if (!isGameRunning && Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
 		{
@@ -66,7 +62,13 @@ public class GameManager : MonoBehaviour
 
 			if (Input.GetButtonDown("Fire1"))
 			{
+				if (score > PlayerPrefs.GetInt("HighScore", 0))
+				{
+					PlayerPrefs.SetInt("HighScore", score);
+				}
+
 				SceneManager.LoadScene("Level");
+				score = 0;
 			}
 		}
 	}
